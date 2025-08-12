@@ -6,7 +6,9 @@ import {
   TableCellsIcon,
   Cog6ToothIcon,
   XMarkIcon,
-} from "@heroicons/react/24/outline"; // <-- This is the missing import
+  ArrowUpTrayIcon,
+} from "@heroicons/react/24/outline";
+import { Link } from "react-router-dom";
 
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   return (
@@ -32,28 +34,45 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
           <span className="text-4xl font-bold">Anomaly</span>
         </div>
         {/* Nav Links */}
-        <nav className="space-y-2">
-          <a
-            href="#"
-            className="flex items-center space-x-3 p-3 rounded-lg bg-active-link text-highlight font-medium text-xl"
-          >
-            <HomeIcon className="h-5 w-5" />
-            <span>Dashboard</span>
-          </a>
-          <a
-            href="#"
-            className="flex items-center space-x-3 p-3 rounded-lg text-light-gray hover:bg-gray-700 text-xl"
-          >
-            <TableCellsIcon className="h-5 w-5" />
-            <span>Reports</span>
-          </a>
-          <a
-            href="#"
-            className="flex items-center space-x-3 p-3 rounded-lg text-light-gray hover:bg-gray-700 text-xl"
-          >
-            <ChartBarIcon className="h-5 w-5" />
-            <span>Analytics</span>
-          </a>
+        <nav>
+          <ul className="space-y-2">
+            <li>
+              <Link
+                to="/"
+                className="flex items-center space-x-3 p-3 rounded-lg bg-active-link text-highlight font-medium text-xl"
+              >
+                <HomeIcon className="h-5 w-5" />
+                <span>Dashboard</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/reports"
+                className="flex items-center space-x-3 p-3 rounded-lg text-light-gray hover:bg-gray-700 text-xl"
+              >
+                <TableCellsIcon className="h-5 w-5" />
+                <span>Reports</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/analytics"
+                className="flex items-center space-x-3 p-3 rounded-lg text-light-gray hover:bg-gray-700 text-xl"
+              >
+                <ChartBarIcon className="h-5 w-5" />
+                <span>Analytics</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/uploads"
+                className="flex items-center space-x-3 p-3 rounded-lg text-light-gray hover:bg-gray-700 text-xl"
+              >
+                <ArrowUpTrayIcon className="h-5 w-5" />
+                <span>Uploads</span>
+              </Link>
+            </li>
+          </ul>
         </nav>
       </div>
       {/* Settings Link at the bottom */}
