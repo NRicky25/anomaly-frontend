@@ -3,17 +3,57 @@ import { ArrowUpTrayIcon } from "@heroicons/react/24/outline";
 
 const Uploads = () => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  // Change state to store the summary directly
+  const [summary, setSummary] = useState(null);
 
   const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+    const file = event.target.files[0];
+    if (file && file.name.endsWith(".csv")) {
+      setSelectedFile(file);
+      setError(null);
+    } else {
+      setSelectedFile(null);
+      setError("Please select a valid CSV file.");
+    }
   };
 
-  const handleFileUpload = (event) => {
+  const handleProcessFile = async (event) => {
     event.preventDefault();
-    if (selectedFile) {
-      console.log("Uploading file:", selectedFile.name);
-    } else {
-      console.log("No file selected.");
+
+    if (!selectedFile) {
+      setError("Please select a file first.");
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+    setSummary(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      const response = await fetch("http://localhost:8000/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Something went wrong.");
+      }
+
+      const data = await response.json();
+      // Directly set the summary from the backend response
+      setSummary(data.summary);
+      console.log("File processed successfully:", data);
+    } catch (err) {
+      setError(err.message);
+      console.error("Error processing file:", err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -23,7 +63,7 @@ const Uploads = () => {
       <p className="text-gray-400 mb-8">
         Upload a new dataset to be processed by the fraud detection model.
       </p>
-      <form onSubmit={handleFileUpload} className="space-y-6">
+      <form onSubmit={handleProcessFile} className="space-y-6">
         <div className="flex items-center justify-center w-full">
           <label
             htmlFor="dropzone-file"
@@ -44,27 +84,67 @@ const Uploads = () => {
               type="file"
               className="hidden"
               onChange={handleFileChange}
+              accept=".csv"
             />
           </label>
         </div>
-
-        {selectedFile && (
+        {selectedFile && !error && (
           <p className="text-gray-400 text-center">
             Selected file:{" "}
             <span className="font-semibold">{selectedFile.name}</span>
           </p>
         )}
-
+        {error && <p className="text-red-500 text-center">{error}</p>}
         <div className="flex justify-center">
           <button
             type="submit"
             className="bg-highlight text-white font-medium py-3 px-8 rounded-lg text-lg hover:bg-highlight-dark"
-            disabled={!selectedFile}
+            disabled={!selectedFile || isLoading || error}
           >
-            Process File
+            {isLoading ? "Processing..." : "Process File"}
           </button>
         </div>
       </form>
+      {/* Render the summary directly from state */}
+      {summary && (
+        <div className="mt-8 p-6 bg-gray-800 rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold mb-4">Summary of Predictions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-gray-700 p-4 rounded-lg">
+              <p className="text-lg font-medium text-gray-300">
+                Total Transactions
+              </p>
+              <p className="text-3xl font-bold text-white">
+                {summary.totalTransactions}
+              </p>
+            </div>
+            <div className="bg-gray-700 p-4 rounded-lg">
+              <p className="text-lg font-medium text-gray-300">
+                Fraudulent Transactions
+              </p>
+              <p className="text-3xl font-bold text-red-500">
+                {summary.fraudCount}
+              </p>
+            </div>
+            <div className="bg-gray-700 p-4 rounded-lg">
+              <p className="text-lg font-medium text-gray-300">
+                Non-Fraudulent Transactions
+              </p>
+              <p className="text-3xl font-bold text-green-500">
+                {summary.nonFraudCount}
+              </p>
+            </div>
+            <div className="bg-gray-700 p-4 rounded-lg">
+              <p className="text-lg font-medium text-gray-300">
+                Total Fraud Amount
+              </p>
+              <p className="text-3xl font-bold text-white">
+                ${summary.totalFraudAmount.toFixed(2)}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
