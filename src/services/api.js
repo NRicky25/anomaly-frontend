@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const API_BASE_URL = "http://localhost:8000";
 
 export const fetchDashboardData = async () => {
@@ -11,5 +13,23 @@ export const fetchDashboardData = async () => {
   } catch (error) {
     console.error("Error fetching dashboard data:", error);
     return null;
+  }
+};
+
+export const getReports = async (page, pageSize, filters) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/reports/transactions`, {
+      params: {
+        page: page,
+        page_size: pageSize,
+        min_amount: filters.min_amount,
+        max_amount: filters.max_amount,
+        is_fraud: filters.is_fraud,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching report data:", error);
+    throw error;
   }
 };

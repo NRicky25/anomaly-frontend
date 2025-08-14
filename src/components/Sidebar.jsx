@@ -8,9 +8,16 @@ import {
   XMarkIcon,
   ArrowUpTrayIcon,
 } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+  const linkClasses = ({ isActive }) =>
+    `flex items-center space-x-3 p-3 rounded-lg text-xl transition-colors duration-200 ease-in-out ${
+      isActive
+        ? "bg-active-link text-highlight font-medium"
+        : "text-light-gray hover:bg-gray-700"
+    }`;
+
   return (
     <aside
       className={`
@@ -37,40 +44,28 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         <nav>
           <ul className="space-y-2">
             <li>
-              <Link
-                to="/"
-                className="flex items-center space-x-3 p-3 rounded-lg bg-active-link text-highlight font-medium text-xl"
-              >
+              <NavLink to="/" className={linkClasses}>
                 <HomeIcon className="h-5 w-5" />
                 <span>Dashboard</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
-                to="/reports"
-                className="flex items-center space-x-3 p-3 rounded-lg text-light-gray hover:bg-gray-700 text-xl"
-              >
+              <NavLink to="/reports" className={linkClasses}>
                 <TableCellsIcon className="h-5 w-5" />
                 <span>Reports</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
-                to="/analytics"
-                className="flex items-center space-x-3 p-3 rounded-lg text-light-gray hover:bg-gray-700 text-xl"
-              >
+              <NavLink to="/analytics" className={linkClasses}>
                 <ChartBarIcon className="h-5 w-5" />
                 <span>Analytics</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
-                to="/uploads"
-                className="flex items-center space-x-3 p-3 rounded-lg text-light-gray hover:bg-gray-700 text-xl"
-              >
+              <NavLink to="/uploads" className={linkClasses}>
                 <ArrowUpTrayIcon className="h-5 w-5" />
                 <span>Uploads</span>
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </nav>
