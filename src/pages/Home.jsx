@@ -16,7 +16,7 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading Dashboard</div>;
   }
   if (error || !data) {
     return <div>Failed to load dashboard data.</div>;

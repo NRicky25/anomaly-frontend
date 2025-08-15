@@ -33,3 +33,13 @@ export const getReports = async (page, pageSize, filters) => {
     throw error;
   }
 };
+
+export const fetchAnalyticsData = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/analytics/trends`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching analytics data:", error);
+    throw error;
+  }
+};
