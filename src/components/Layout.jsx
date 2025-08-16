@@ -1,9 +1,9 @@
-// src/components/Layout.jsx
 import React, { useState } from "react";
+import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 
-const Layout = ({ children }) => {
+const Layout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
             <Bars3Icon className="h-8 w-8 text-white" />
           </button>
         </div>
-        {children}
+        <Outlet />
       </main>
     </div>
   );

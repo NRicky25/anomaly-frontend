@@ -43,3 +43,12 @@ export const fetchAnalyticsData = async () => {
     throw error;
   }
 };
+
+export const fetchSettings = async () => {
+  const response = await axios.get(`${API_BASE_URL}/settings`);
+  return response.data;
+};
+
+export const updateSettings = async (values) => {
+  await axios.post(`${API_BASE_URL}/settings`, values);
+};

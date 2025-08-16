@@ -71,13 +71,13 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         </nav>
       </div>
       {/* Settings Link at the bottom */}
-      <a
-        href="#"
+      <NavLink
+        to="/settings"
         className="mt-auto flex items-center space-x-3 p-3 rounded-lg text-light-gray hover:bg-gray-700"
       >
         <Cog6ToothIcon className="h-5 w-5" />
         <span>Settings</span>
-      </a>
+      </NavLink>
     </aside>
   );
 };
