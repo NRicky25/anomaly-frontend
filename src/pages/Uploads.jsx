@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { ArrowUpTrayIcon } from "@heroicons/react/24/outline";
+import { uploadFile } from "../services/api"; // <-- import the API function
 
 const Uploads = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  // Change state to store the summary directly
   const [summary, setSummary] = useState(null);
 
   const handleFileChange = (event) => {
@@ -32,21 +32,7 @@ const Uploads = () => {
     setSummary(null);
 
     try {
-      const formData = new FormData();
-      formData.append("file", selectedFile);
-
-      const response = await fetch("http://localhost:8000/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Something went wrong.");
-      }
-
-      const data = await response.json();
-      // Directly set the summary from the backend response
+      const data = await uploadFile(selectedFile); // <-- use api.js function
       setSummary(data.summary);
       console.log("File processed successfully:", data);
     } catch (err) {
@@ -105,7 +91,6 @@ const Uploads = () => {
           </button>
         </div>
       </form>
-      {/* Render the summary directly from state */}
       {summary && (
         <div className="mt-8 p-6 bg-gray-800 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold mb-4">Summary of Predictions</h2>

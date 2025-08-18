@@ -11,6 +11,7 @@ import {
 import { Link, NavLink } from "react-router-dom";
 
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+  const logoPath = "/images/logo.png";
   const linkClasses = ({ isActive }) =>
     `flex items-center space-x-3 p-3 rounded-lg text-xl transition-colors duration-200 ease-in-out ${
       isActive
@@ -35,12 +36,14 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       </div>
 
       <div>
-        {/* Logo and Title */}
-        <div className="flex items-center space-x-3 mb-15">
-          <div className="w-8 h-8 bg-highlight rounded-md"></div>
-          <span className="text-4xl font-bold">Anomaly</span>
+        <div className="flex items-center space-x-2 mb-15">
+          <img
+            src={logoPath}
+            className="w-9 h-9 object-contain"
+            alt="Anomaly Logo"
+          />
+          <span className="text-2xl font-bold leading-tight">Anomaly</span>
         </div>
-        {/* Nav Links */}
         <nav>
           <ul className="space-y-2">
             <li>
@@ -70,7 +73,6 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
           </ul>
         </nav>
       </div>
-      {/* Settings Link at the bottom */}
       <NavLink
         to="/settings"
         className="mt-auto flex items-center space-x-3 p-3 rounded-lg text-light-gray hover:bg-gray-700"

@@ -1,15 +1,19 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8000";
+const API_KEY = import.meta.env.VITE_API_KEY;
+const API_BASE_URL = import.meta.env.VITE_DEPLOYMENT;
+
+const apiClient = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    "x-api-key": API_KEY,
+  },
+});
 
 export const fetchDashboardData = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/dashboard/data`);
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    const data = await response.json();
-    return data;
+    const response = await apiClient.get("/dashboard/data");
+    return response.data;
   } catch (error) {
     console.error("Error fetching dashboard data:", error);
     return null;
@@ -18,15 +22,18 @@ export const fetchDashboardData = async () => {
 
 export const getReports = async (page, pageSize, filters) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/reports/transactions`, {
-      params: {
-        page: page,
-        page_size: pageSize,
-        min_amount: filters.min_amount,
-        max_amount: filters.max_amount,
-        is_fraud: filters.is_fraud,
-      },
-    });
+    const response = await apiClient.get(
+      `${API_BASE_URL}/reports/transactions`,
+      {
+        params: {
+          page: page,
+          page_size: pageSize,
+          min_amount: filters.min_amount,
+          max_amount: filters.max_amount,
+          is_fraud: filters.is_fraud,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching report data:", error);
@@ -36,7 +43,7 @@ export const getReports = async (page, pageSize, filters) => {
 
 export const fetchAnalyticsData = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/analytics/trends`);
+    const response = await apiClient.get(`${API_BASE_URL}/analytics/trends`);
     return response.data;
   } catch (error) {
     console.error("Error fetching analytics data:", error);
@@ -45,10 +52,27 @@ export const fetchAnalyticsData = async () => {
 };
 
 export const fetchSettings = async () => {
-  const response = await axios.get(`${API_BASE_URL}/settings`);
+  const response = await apiClient.get(`${API_BASE_URL}/settings`);
   return response.data;
 };
 
 export const updateSettings = async (values) => {
   await axios.post(`${API_BASE_URL}/settings`, values);
+};
+
+export const uploadFile = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const response = await apiClient.post("/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    throw new Error(error.response?.data?.detail || "Something went wrong.");
+  }
 };

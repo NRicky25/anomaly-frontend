@@ -27,6 +27,12 @@ const Home = () => {
       String(value).toLowerCase().includes(searchQuery.toLowerCase())
     )
   );
+  const metrics = data?.metrics || {
+    total_anomalies: 0,
+    total_transactions: 0,
+    revenue: 0,
+  };
+  console.log(metrics.total_anomalies);
 
   return (
     <>
