@@ -23,7 +23,7 @@ export const fetchDashboardData = async () => {
 export const getReports = async (page, pageSize, filters) => {
   try {
     const response = await apiClient.get(
-      `${API_BASE_URL}/reports/transactions`,
+      "/reports/transactions", // Changed
       {
         params: {
           page: page,
@@ -43,7 +43,7 @@ export const getReports = async (page, pageSize, filters) => {
 
 export const fetchAnalyticsData = async () => {
   try {
-    const response = await apiClient.get(`${API_BASE_URL}/analytics/trends`);
+    const response = await apiClient.get("/analytics/trends"); // Changed
     return response.data;
   } catch (error) {
     console.error("Error fetching analytics data:", error);
@@ -52,12 +52,12 @@ export const fetchAnalyticsData = async () => {
 };
 
 export const fetchSettings = async () => {
-  const response = await apiClient.get(`${API_BASE_URL}/settings`);
+  const response = await apiClient.get("/settings"); // Changed
   return response.data;
 };
 
 export const updateSettings = async (values) => {
-  await axios.post(`${API_BASE_URL}/settings`, values);
+  await apiClient.post("/settings", values); // Changed
 };
 
 export const uploadFile = async (file) => {
